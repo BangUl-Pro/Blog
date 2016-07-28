@@ -9,8 +9,8 @@ class User(Base):
     name = Column(String(30))
     email = Column(String(50), unique=True)
 
-    def __init__(self, id, password, name, email):
-        self.id = id
+    def __init__(self, user_id, password, name=None, email=None):
+        self.id = user_id
         self.password = password
         self.name = name
         self.email = email
@@ -19,9 +19,9 @@ class User(Base):
         return '{"id": "%s", "password":"%s", "name":"%s", "email":"%s"' %\
                (self.id, self.password, self.name, self.email)
 
-    def get_user(id, password):
+    def get_user(self):
         return db_session.query(User)\
-            .filter(User.id == id, User.password == password).first()
+            .filter(User.id == self.id, User.password == self.password).first()
 
     def insert_user(self):
         try:

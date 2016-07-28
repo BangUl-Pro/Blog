@@ -9,9 +9,10 @@ from app.models.user import User
 def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate_on_submit():
-        id = form.id.data
+        user_id = form.id.data
         password = form.password.data
-        user = User.get_user(id, password)
+        req_user = User(user_id, password)
+        user = User.get_user(req_user)
         if user:
             return redirect(url_for('root'))
     return render_template('login.html', form=form)
