@@ -1,0 +1,7 @@
+{% import 'components/form.html' as forms %}
+<form action="{{ request.url }}" method="post">
+  {{ form.csrf_token }}
+  {% call forms.field_with_assert('id', form.errors['id']) %}
+    {{ form.id(placeholder='아이디') }}
+  {% endcall %}
+</form>
