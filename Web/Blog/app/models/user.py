@@ -7,7 +7,7 @@ class User(Base):
     id = Column(String(30), primary_key=True)
     password = Column(String(30))
     name = Column(String(30))
-    email = Column(String(50))
+    email = Column(String(50), unique=True)
 
     def __init__(self, id, password, name, email):
         self.id = id
@@ -22,3 +22,21 @@ class User(Base):
     def get_user(id, password):
         return db_session.query(User)\
             .filter(User.id == id, User.password == password).first()
+
+    def insert_user(self):
+        try:
+            query_user = db_session.query(User).filter(User.id == self.id).first()
+            if query_user:
+                return 301
+
+            query_user = db_session.query(User).filter(User.email == self.email).first()
+            if query_user:
+                return 302
+
+            db_session.add(self)
+            db_session.commit()
+            return 200
+        except Exception as error:
+            print(error)
+            db_session.rollback()
+            return 303

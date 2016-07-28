@@ -21,7 +21,7 @@ class SignUpForm(LoginForm):
     ])
 
     confirm = PasswordField('Confirm', [
-        InputRequired(message='메세지 확인은 필수입니다.'),
+        InputRequired(message='비밀번호 확인은 필수입니다.'),
         EqualTo('password', message='비밀번호와 일치해야합니다.')
     ])
 
