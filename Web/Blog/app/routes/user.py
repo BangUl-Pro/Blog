@@ -5,4 +5,4 @@ from flask import render_template
 
 @app.route(LOGIN_URL)
 def login():
-    render_template('login.html')
+    return render_template('login.html')
