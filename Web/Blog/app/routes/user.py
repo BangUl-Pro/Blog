@@ -20,4 +20,20 @@ def login():
 @app.route(SIGN_UP_URL, methods=['GET', 'POST'])
 def sign_up():
     form = SignUpForm(request.form)
+    if request.method == 'POST' and form.validate_on_submit():
+        name = form.name.data
+        user_id = form.id.data
+        password = form.password.data
+        email = form.email.data
+        user = User(user_id, password, name, email)
+        res = User.insert_user(user)
+        if res == 200:
+            print('success')
+            return redirect(url_for('root'))
+        elif res == 301:
+            # TODO 아이디 겹침
+            print('아이디 겹침')
+        elif res == 302:
+            # TODO 이메일 겹침
+            print('이메일 겹침')
     return render_template('sign_up.html', form=form)

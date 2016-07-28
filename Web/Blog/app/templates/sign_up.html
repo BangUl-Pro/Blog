@@ -1,7 +1,26 @@
 {% import 'components/form.html' as forms %}
 <form action="{{ request.url }}" method="post">
   {{ form.csrf_token }}
+
+  {% call forms.field_with_assert('name', form.errors['name']) %}
+    {{ form.name(placeholder='이름') }}
+  {% endcall %}
+
   {% call forms.field_with_assert('id', form.errors['id']) %}
     {{ form.id(placeholder='아이디') }}
   {% endcall %}
+
+  {% call forms.field_with_assert('password', form.errors['password']) %}
+    {{ form.password(placeholder='비밀번호') }}
+  {% endcall %}
+
+  {% call forms.field_with_assert('confirm', form.errors['confirm']) %}
+    {{ form.confirm(placeholder='비밀번호 확인') }}
+  {% endcall %}
+
+  {% call forms.field_with_assert('email', form.errors['email']) %}
+    {{ form.email(placeholder='이메일') }}
+  {% endcall %}
+
+  <button type="submit">확인</button>
 </form>
