@@ -1,0 +1,12 @@
+{% macro field_with_assert(id, errors) %}
+  <div class="{% if errors %}error{% endif %}" id="{{ id }}">
+    {{ caller() }}
+    {% if errors %}
+      <div class="error">
+        {% for error in errors %}
+          {{ error }}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+{% endmacro %}
