@@ -6,4 +6,4 @@ app = Flask(__name__)
 redis_store.init_app(app)
 
 
-from app.routes import index, user
+from app.routes import index, user, notice
