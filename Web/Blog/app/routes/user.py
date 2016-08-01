@@ -1,6 +1,6 @@
 from app import app
-from app.managers.url_manager import LOGIN_URL, SIGN_UP_URL
-from flask import render_template, request, redirect, url_for
+from app.managers.url_manager import LOGIN_URL, SIGN_UP_URL, LOGOUT_URL
+from flask import render_template, request, redirect, url_for, session
 from app.forms.user import LoginForm, SignUpForm
 from app.models.user import User
 
@@ -8,12 +8,13 @@ from app.models.user import User
 @app.route(LOGIN_URL, methods=['GET', 'POST'])
 def login():
     form = LoginForm(request.form)
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST' and form.validate():
         user_id = form.id.data
         password = form.password.data
         req_user = User(user_id, password)
         user = User.get_user(req_user)
         if user:
+            session['user'] = user
             return redirect(url_for('root'))
     return render_template('login.html', form=form)
 
@@ -38,3 +39,9 @@ def sign_up():
             # TODO 이메일 겹침
             print('이메일 겹침')
     return render_template('sign_up.html', form=form)
+
+
+@app.route(LOGOUT_URL, methods=['GET'])
+def logout():
+    session.pop('user')
+    return redirect(url_for('root'))
