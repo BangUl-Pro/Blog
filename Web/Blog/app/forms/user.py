@@ -1,5 +1,4 @@
-from flask_wtf import Form
-from wtforms import StringField
+from wtforms import StringField, PasswordField, Form
 from wtforms.validators import InputRequired, Length, EqualTo, Email
 
 
@@ -9,7 +8,7 @@ class LoginForm(Form):
         Length(min=6, message='%(min)d 글자 이상이여야 합니다.')
     ])
 
-    password = StringField('Password', [
+    password = PasswordField('Password', [
         InputRequired(message='비밀번호는 필수입니다.'),
         Length(min=6, message='%(min)d 글자 이상이여야 합니다.')
     ])
@@ -20,8 +19,8 @@ class SignUpForm(LoginForm):
         InputRequired(message='이름은 필수입니다.'),
     ])
 
-    confirm = StringField('Confirm', [
-        InputRequired(message='메세지 확인은 필수입니다.'),
+    confirm = PasswordField('Confirm', [
+        InputRequired(message='비밀번호 확인은 필수입니다.'),
         EqualTo('password', message='비밀번호와 일치해야합니다.')
     ])
 
