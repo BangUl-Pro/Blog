@@ -1,6 +1,7 @@
 {% import 'components/form.html' as forms %}
 <form action="{{ request.url }}" method="post">
   {{ form.csrf_token }}
+
   {% call forms.field_with_assert('id', form.errors['id']) %}
     {{ form.id(placeholder='아이디') }}
   {% endcall %}
@@ -8,6 +9,5 @@
   {% call forms.field_with_assert('password', form.errors['password']) %}
     {{ form.password(placeholder='비밀번호') }}
   {% endcall %}
-
   <button type="submit">확인</button>
 </form>
