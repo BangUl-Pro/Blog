@@ -1,0 +1,18 @@
+{% import 'components/form.html' as forms %}
+<form action="{{ request.url }}" method="post">
+  {{ form.csrf_token }}
+
+  {% call forms.field_with_assert('title', form.errors['title']) %}
+    {{ form.title(placeholder='제목') }}
+  {% endcall %}
+
+  {% call forms.field_with_assert('content', form.errors['content']) %}
+    {{ form.content(placeholder='내용') }}
+  {% endcall %}
+
+  {% call forms.field_with_assert('category', form.errors['category']) %}
+    {{ form.category() }}
+  {% endcall %}
+
+  <button type="submit">확인</button>
+</form>
