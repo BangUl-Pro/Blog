@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Integer, Text, ForeignKey, DateTime, desc
 from app.managers.db_manager import Base, db_session
-import datetime
+from datetime import datetime, timedelta
 
 
 class Notice(Base):
@@ -39,3 +39,12 @@ def insert_notice(notice):
 def get_notices(category=None):
     if not category:
         return db_session.query(Notice).order_by(desc(Notice.created)).limit(10).all()
+    #TODO category 있을 때
+
+
+def get_latest_notices(category=None):
+    now = datetime.now() - timedelta(days=7)
+    print('time = {}'.format(now))
+    if not category:
+        return db_session.query(Notice).filter(Notice.created >= now).order_by(desc(Notice.created)).limit(10).all()
+    # TODO category 있을 때
