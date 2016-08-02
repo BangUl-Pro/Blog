@@ -1,6 +1,6 @@
-from sqlalchemy import Column, String, Integer, Text, ForeignKey, DateTime
+from sqlalchemy import Column, String, Integer, Text, ForeignKey, DateTime, desc
 from app.managers.db_manager import Base, db_session
-import datetime
+from datetime import datetime, timedelta
 
 
 class Notice(Base):
@@ -20,13 +20,35 @@ class Notice(Base):
         self.category = category
 
     def __repr__(self):
+        # TODO 고쳐야 함
+        if not self.category:
+            self.category = 0
         return '{"id": %s, "title":"%s", "content":"%s", "author":"%s", "created":"%s", "category":%d}' %\
-            self.id, self.title, self.content, self.author, self.created, self.category
+               (self.id, self.title, self.content, self.author, self.created, self.category)
 
-    def insert_notice(self):
-        try:
-            db_session.add(self)
-            db_session.commit()
-        except Exception as error:
-            print('error = {}'.format(error))
-            db_session.rollback()
+
+def insert_notice(notice):
+    try:
+        db_session.add(notice)
+        db_session.commit()
+    except Exception as error:
+        print('error = {}'.format(error))
+        db_session.rollback()
+
+
+def get_notices(category=None):
+    if not category:
+        return db_session.query(Notice).order_by(desc(Notice.created)).limit(10).all()
+    #TODO category 있을 때
+
+
+def get_latest_notices(category=None):
+    now = datetime.now() - timedelta(days=7)
+    print('time = {}'.format(now))
+    if not category:
+        return db_session.query(Notice).filter(Notice.created >= now).order_by(desc(Notice.created)).limit(10).all()
+    # TODO category 있을 때
+
+
+def get_notice(notice_id):
+    return db_session.query(Notice).filter(Notice.id == notice_id).first()
