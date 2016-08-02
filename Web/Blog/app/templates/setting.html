@@ -1,0 +1,41 @@
+{% import 'components/form.html' as forms %}
+
+<form action="{{ update_profile_url }}" method="post">
+  {% call forms.field_with_assert('user_name', form.errors['name']) %}
+    {{ form.name(placeholder='이름') }}
+  {% endcall %}
+
+  {% call forms.field_with_assert('user_id', form.errors['id']) %}
+    {{ form.id(placeholder='아이디') }}
+  {% endcall %}
+
+  {% call forms.field_with_assert('user_password', form.errors['password']) %}
+    {{ form.password(placeholder='비밀번호') }}
+  {% endcall %}
+
+  {% call forms.field_with_assert('user_email', form.errors['email']) %}
+    {{ form.email(placeholder='이메일') }}
+  {% endcall %}
+
+  <button id="submit" type="submit">수정</button>
+</form>
+
+<script src="http://code.jquery.com/jquery-3.1.0.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $("#id").val('{{ user.id }}');
+    $("#password").val('{{ user.password }}');
+    $("#name").val('{{ user.name }}');
+    $("#email").val('{{ user.email }}');
+
+    $("#submit").click(function () {
+      var result = confirm('정말 수정하시겠습니까?');
+      if (result) {
+        document.form.submit();
+      } else {
+        return false;
+      }
+    });
+  });
+</script>

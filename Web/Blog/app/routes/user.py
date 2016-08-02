@@ -1,5 +1,5 @@
 from app import app
-from app.managers.url_manager import LOGIN_URL, SIGN_UP_URL, LOGOUT_URL
+from app.managers.url_manager import LOGIN_URL, SIGN_UP_URL, LOGOUT_URL, UPDATE_PROFILE_URL
 from flask import render_template, request, redirect, url_for, session
 from app.forms.user import LoginForm, SignUpForm
 from app.models.user import User
@@ -45,3 +45,8 @@ def sign_up():
 def logout():
     session.pop('user')
     return redirect(url_for('root'))
+
+
+@app.route(UPDATE_PROFILE_URL, methods=['POST'])
+def update_profile():
+    pass
