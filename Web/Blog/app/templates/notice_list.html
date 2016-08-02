@@ -1,10 +1,4 @@
+{% import 'components/notice_form.html' as notice_form %}
 {% for notice in notices %}
-  <div class="notice view_holder">
-    <span class="notice info">
-      <b>{{ notice.author }}</b>
-      {{ notice.created | left_date_format_filter }}
-    </span>
-    {{ notice.title }}
-    {{ notice.content }}
-  </div>
+  {{ notice_form.display_notice(notice) }}
 {% endfor %}

@@ -48,3 +48,7 @@ def get_latest_notices(category=None):
     if not category:
         return db_session.query(Notice).filter(Notice.created >= now).order_by(desc(Notice.created)).limit(10).all()
     # TODO category 있을 때
+
+
+def get_notice(notice_id):
+    return db_session.query(Notice).filter(Notice.id == notice_id).first()

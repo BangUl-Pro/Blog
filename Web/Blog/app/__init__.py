@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_redis import FlaskRedis
 from datetime import datetime
+from app.managers.url_manager import NOTICE_DETAIL_URL
 
 
 redis_store = FlaskRedis()
@@ -20,6 +21,7 @@ def left_date_format_filter(time):
     return '방금 전'
 
 app.jinja_env.filters['left_date_format_filter'] = left_date_format_filter
+app.jinja_env.globals['notice_detail_url'] = NOTICE_DETAIL_URL
 
 
 from app.routes import index, user, notice
