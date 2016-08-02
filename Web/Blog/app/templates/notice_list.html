@@ -1,0 +1,4 @@
+{% import 'components/notice_form.html' as notice_form %}
+{% for notice in notices %}
+  {{ notice_form.display_notice(notice) }}
+{% endfor %}

@@ -12,7 +12,7 @@ class Category(Base):
 
     def __repr__(self):
         return '{"id":%d, "name":%d}' %\
-            self.id, self.name
+               (self.id, self.name)
 
     def insert_category(self):
         category = db_session.query(Category).filter(Category.name == self.name).first()
