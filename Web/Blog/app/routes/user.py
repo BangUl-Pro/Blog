@@ -2,7 +2,7 @@ from app import app
 from app.managers.url_manager import LOGIN_URL, SIGN_UP_URL, LOGOUT_URL, UPDATE_PROFILE_URL
 from flask import render_template, request, redirect, url_for, session
 from app.forms.user import LoginForm, SignUpForm
-from app.models.user import User
+from app.models.user import User, update_user
 
 
 @app.route(LOGIN_URL, methods=['GET', 'POST'])
@@ -49,4 +49,11 @@ def logout():
 
 @app.route(UPDATE_PROFILE_URL, methods=['POST'])
 def update_profile():
-    pass
+    form = SignUpForm(request.form)
+    user = User(form.id.data, form.password.data, form.name.data, form.email.data)
+    if update_user(session.get('user'), user) == 200:
+        print('성공')
+        return redirect(url_for('root'))
+    else:
+        print('실패')
+        return redirect(url_for('setting'))
