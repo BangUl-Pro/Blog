@@ -2,7 +2,7 @@ from app import app
 from app.managers.url_manager import LOGIN_URL, SIGN_UP_URL, LOGOUT_URL, UPDATE_PROFILE_URL
 from flask import render_template, request, redirect, url_for, session
 from app.forms.user import LoginForm, SignUpForm
-from app.models.user import User, update_user
+from app.models.user import User, update_user, get_user, insert_user
 
 
 @app.route(LOGIN_URL, methods=['GET', 'POST'])
@@ -12,7 +12,7 @@ def login():
         user_id = form.id.data
         password = form.password.data
         req_user = User(user_id, password)
-        user = User.get_user(req_user)
+        user = get_user(req_user)
         if user:
             session['user'] = user
             return redirect(url_for('root'))
@@ -22,13 +22,13 @@ def login():
 @app.route(SIGN_UP_URL, methods=['GET', 'POST'])
 def sign_up():
     form = SignUpForm(request.form)
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'POST' and form.validate():
         name = form.name.data
         user_id = form.id.data
         password = form.password.data
         email = form.email.data
         user = User(user_id, password, name, email)
-        res = User.insert_user(user)
+        res = insert_user(user)
         if res == 200:
             print('success')
             return redirect(url_for('root'))

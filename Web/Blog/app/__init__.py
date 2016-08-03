@@ -24,4 +24,4 @@ app.jinja_env.filters['left_date_format_filter'] = left_date_format_filter
 app.jinja_env.globals['notice_detail_url'] = NOTICE_DETAIL_URL
 
 
-from app.routes import index, user, notice, setting
+from app.routes import index, user, notice, setting, category

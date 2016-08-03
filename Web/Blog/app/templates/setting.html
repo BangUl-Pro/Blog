@@ -20,6 +20,22 @@
   <button id="submit" type="submit">수정</button>
 </form>
 
+<form id="update_category">
+  <input type="text" id="category_input" name="-1" content="-1">
+</form>
+
+<div class="category">
+  <select class="category list" multiple>
+    {% for category in categories %}
+      <option id="{{ category.id }}" value="{{ category.id }}" class="category content">{{ category.name }}</option>
+    {% endfor %}
+  </select>
+  <div class="category controller">
+    <button type="button" id="add_category">+</button>
+    <button type="button" id="remove_category">-</button>
+  </div>
+</div>
+
 <script src="http://code.jquery.com/jquery-3.1.0.js"></script>
 
 <script>
@@ -36,6 +52,117 @@
       } else {
         return false;
       }
+    });
+
+    $('.category.content').click(function () {
+      $('#category_input').val($(this).text());
+      $('#category_input').attr('name', $(this).attr('value'));
+      $('#category_input').attr('content', $('.category.list').prop('selectedIndex'));
+    });
+
+    $('#add_category').click(function () {
+      $.ajax({
+        type: 'post',
+        url: "{{ add_category_url }}",
+        dataType: 'json',
+        success: function (data) {
+          var data_json = JSON.parse(JSON.stringify(data));
+          var id = data_json.id;
+          var result = data_json.result;
+          if (!result) {
+            alert('카테고리 추가에 실패했습니다.');
+          } else {
+            $('.category.list').append($('<option>', {
+              value: id,
+              text: id
+            }));
+
+            $("#category_input").val(id);
+            $("#category_input").attr('name', id);
+          }
+        },
+        error: function () {
+          alert('예기치 않은 오류가 발생했습니다.');
+        }
+      });
+    });
+
+
+    $('#remove_category').click(function () {
+      var sel = $('.category.list').val();
+      console.log('removeCategory Click = ' + JSON.stringify(sel));
+      $.ajax({
+        type: 'POST',
+        url: '{{ remove_category_url }}',
+        data: {
+          'selected': sel
+        },
+        dataType: 'json',
+        success: function (data) {
+          var dataJson = JSON.parse(JSON.stringify(data));
+          var result = dataJson.result;
+          if (result) {
+            $('.category.list option:selected').remove();
+          } else {
+            alert('예기치 못한 오류가 발생했습니다.');
+          }
+        },
+        error: function (a, b, error) {
+          alert(error);
+        }
+      })
+    });
+
+    $('#update_category').submit(function (e) {
+      var category_name = $('#category_input').val();
+      var category_id = $('#category_input').attr('name');
+      var index = $('#category_input').attr('content');
+      var url;
+      if (category_id == -1) {
+        url = '{{ add_category_url }}';
+      } else {
+        url = '{{ update_category_url }}';
+      }
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: {
+          'category_id': category_id,
+          'category_name': category_name
+        },
+        dataType: 'json',
+        success: function (data) {
+          console.log('data = ' + JSON.stringify(data));
+          if (category_id == -1) {
+            // 추가
+            var id = data.id;
+            var result = data.result;
+            if (!result) {
+              alert('카테고리 추가에 실패했습니다.');
+            } else {
+              $('.category.list').append($('<option>', {
+                value: id,
+                text: category_name
+              }));
+            }
+          } else {
+            // 수정
+            var code = data.result;
+            if (code == 200) {
+              console.log('success');
+              $('.category.list option:eq(' + index + ')').text(category_name);
+            } else if (code == 301) {
+              alert('이미 사용 중인 아이디 입니다.');
+            } else {
+              alert('예기치 못한 에러가 발생했습니다.');
+            }
+          }
+        },
+        error: function (a, b, error) {
+          alert(error);
+        }
+      });
+      return false;
     });
   });
 </script>
